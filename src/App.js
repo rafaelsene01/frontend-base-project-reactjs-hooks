@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [tech, setTech] = useState(['React Js', 'React Native']);
+  const [tech, setTech] = useState([]);
   const [newTech, setNewTech] = useState('');
 
   function handleAdd() {
     setTech([...tech, newTech]);
     setNewTech('');
   }
+
+  // Executa somente quando inicia, igual componentDidMount.
+  useEffect(() => {
+    const storageTech = localStorage.getItem('tech');
+
+    if (storageTech) {
+      setTech(JSON.parse(storageTech));
+    }
+    /* Executa uma acao assim que o componente deixa de ser montado,
+        usar dentro de qualquer useEffect()
+    return() => {
+      document.removeEventListener()
+    }; */
+  }, []);
+
+  // Executa quando objeto sofrer auteracao, no caso: tech
+  useEffect(() => {
+    localStorage.setItem('tech', JSON.stringify(tech));
+  }, [tech]);
+
   return (
     <>
       <ul>
